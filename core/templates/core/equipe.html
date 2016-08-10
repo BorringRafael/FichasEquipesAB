@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}Lista de Equipes AB{% endblock title %}
+{% block body %}
+	<div class="row">
+	{% for list in equipe_list %}
+		<p>
+			<button type="button"
+					class="btn btn-primary btn-lg btn-block"
+					onclick="location.href='{% url 'core.profissional' list.ine %}'">
+				{{ list }}				
+			</button>
+		</p>
+	{% endfor %}
+	</div>
+{% endblock body %}

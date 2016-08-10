@@ -1,0 +1,20 @@
+@page {
+	size: a4;
+	margin-top: 1cm;
+	margin-bottom: 2cm;
+	margin-left: 0.5cm;
+	margin-right: 0.5cm;
+}
+div {
+	border: 4px ridge black;
+}
+h3 {
+	text-align: center;
+}
+.linha {
+	height: 30px;
+	border: 1px solid black;
+}
+.negrito {
+	font-weight: bold;
+}
