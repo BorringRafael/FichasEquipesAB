@@ -82,7 +82,6 @@ class Profissional(models.Model):
         )
     equipe = models.ForeignKey(
         'Equipe',
-        blank=True,
         )
 
     class Meta:
