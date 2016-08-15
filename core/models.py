@@ -23,7 +23,7 @@ class Unidade(models.Model):
         verbose_name_plural = 'Unidades'
 
     def __str__(self):
-        return '%s - %s' % (self.cnes, self.nome)
+        return '%s %s' % (self.cnes, self.nome)
 
 
 class Equipe(models.Model):
@@ -39,7 +39,6 @@ class Equipe(models.Model):
                     MaxLengthValidator(4, 'São 4 dígitos'),
                     MinLengthValidator(4, 'São 4 dígitos'),
                     ],
-        unique=True,
         blank=True,
         )
     ine = models.CharField(
@@ -49,7 +48,7 @@ class Equipe(models.Model):
                     MaxLengthValidator(10, 'São 10 dígitos'),
                     MinLengthValidator(10, 'São 10 dígitos'),
                     ],
-        unique=True,
+        blank=True,
         )
     unidade = models.ForeignKey(
         'Unidade',
@@ -60,7 +59,7 @@ class Equipe(models.Model):
         verbose_name_plural = 'Equipes'
 
     def __str__(self):
-        return '%s - %s' % (self.area, self.nome)
+        return '%s %s' % (self.area, self.nome)
 
 
 class Profissional(models.Model):
@@ -91,7 +90,7 @@ class Profissional(models.Model):
         verbose_name_plural = 'profissionais'
 
     def __str__(self):
-        return '%s - %s' % (self.nome, self.cbo.nome)
+        return '%s %s' % (self.nome, self.cbo.nome)
 
 
 class CBO(models.Model):
@@ -115,4 +114,4 @@ class CBO(models.Model):
         verbose_name_plural = 'CBOs'
 
     def __str__(self):
-        return '%s - %s' % (self.cbo, self.nome)
+        return '%s %s' % (self.cbo, self.nome)
