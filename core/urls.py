@@ -30,12 +30,12 @@ urlpatterns = [
         name='core.equipe',
         ),
     url(
-        r'^profissional/(?P<ine>\d+)/$',
+        r'^profissional/(?P<v1>\w+)/$',
         profissional,
         name='core.profissional'
         ),
     url(
-        r'^profissional/(?P<ine>\d+)/(?P<cns>\d+)/$',
+        r'^profissional/(?P<v1>\w+)/(?P<v2>\d{15})/$',
         protocolo,
         name='core.protocolo'
         ),

@@ -3,6 +3,7 @@
 {% block body %}
 	<div class="row">
 	{% for list in profissional_list %}
+	{% if list.ine %}
 		<p>
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
@@ -11,6 +12,16 @@
 				{{ list }}				
 			</button>
 		</p>
+	{% else %}
+		<p>
+			<button type="button"
+					class="btn btn-primary btn-lg btn-block"
+					onclick=
+						"location.href='{% url 'core.protocolo' list.equipe.nome list.cns %}'">
+				{{ list }}				
+			</button>
+		</p>
+	{% endif %}
 	{% endfor %}
 	</div>
 {% endblock body %}
