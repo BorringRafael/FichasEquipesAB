@@ -25,17 +25,17 @@ urlpatterns = [
         name='core.index',
         ),
     url(
-        r'^equipe/$',
+        r'^(?P<v1>\w+)/equipe/$',
         equipe,
         name='core.equipe',
         ),
     url(
-        r'^profissional/(?P<v1>\w+)/$',
+        r'^(?P<v1>\w+)/profissional/(?P<v2>\w+)/$',
         profissional,
         name='core.profissional'
         ),
     url(
-        r'^profissional/(?P<v1>\w+)/(?P<v2>\d{15})/$',
+        r'^(?P<v1>\w+)/profissional/(?P<v2>\w+)/(?P<v3>\d{15})/$',
         protocolo,
         name='core.protocolo'
         ),
