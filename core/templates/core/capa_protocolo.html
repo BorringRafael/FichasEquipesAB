@@ -1,0 +1,50 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block style %}
+{{ block.super }}
+	<link href="{% static 'core/css/capa_protocolo.css' %}" rel="stylesheet">
+{% endblock style %}
+{% block title %}Capa de Protocolo{% endblock title %}
+{% block body %}
+	<div class="row">
+		<div class="col-xs-4">
+			<img src="{% static 'core/img/logo_esus.png' %}"
+			class="img-responsive" width="500" height="300">
+		</div>
+		<div class="col-xs-4">
+			<img src="{% static 'core/img/logo_sms.png' %}"
+			class="img-responsive" width="500" height="300">
+		</div>
+		<div class="col-xs-4">
+			<img src="{% static 'core/img/logo_prefeitura.png' %}"
+			class="img-responsive" width="500" height="300">
+		</div>
+	</div>
+	<div class="row text-center"><br><br><br><br>
+		<h1>Fichas</h1><br>
+		<h1>de</h1><br>
+		<h1>Protocolo</h1><br>
+	</div>
+	<div class="row text-center">
+		<div class="footer navbar-fixed-bottom">
+		{% for equipe in equipe %}
+			<p class="info">{{ equipe.unidade.nome }}</p><br>
+		{% endfor %}
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="footer navbar-fixed-bottom">
+		{% for equipe in equipe %}
+			<div class="col-xs-4">
+				Equipe: <spam class="info">{{ equipe.nome }}</spam>
+			</div>
+			<div class="col-xs-4">
+				Área: <spam class="info">{{ equipe.area }}</spam>
+			</div>
+			<div class="col-xs-4">
+				INE: <spam class="info">{{ equipe.ine }}</spam>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+{% endblock body %}

@@ -18,10 +18,21 @@ def profissional(request, v1, v2):
     return render(request, 'core/profissional.html', {
                 'profissional_list': profissional_list,
                 'v1': v1,
+                'v2': v2,
                 })
 
 
-def protocolo(request, v1, v2, v3):
+def capa_protocolo(request, v1, v2):
+    if Equipe.objects.filter(ine=v2).exists():
+        equipe = Equipe.objects.filter(ine=v2)
+    else:
+        equipe = Equipe.objects.filter(nome=v2)
+    return render(request, 'core/capa_protocolo.html', {
+                'equipe': equipe,
+                })
+
+
+def ficha_protocolo(request, v1, v2, v3):
     profissional_filter = Profissional.objects.get(cns=v3)
     return render(request, 'core/ficha_protocolo.html', {
                 'profissional_filter': profissional_filter,

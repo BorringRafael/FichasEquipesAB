@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from .views import equipe, profissional, protocolo
+from .views import equipe, profissional, ficha_protocolo, capa_protocolo
 
 
 urlpatterns = [
@@ -35,8 +35,13 @@ urlpatterns = [
         name='core.profissional'
         ),
     url(
+        r'^(?P<v1>\w+)/capa/(?P<v2>\w+)/$',
+        capa_protocolo,
+        name='core.capa_protocolo'
+        ),
+    url(
         r'^(?P<v1>\w+)/profissional/(?P<v2>\w+)/(?P<v3>\d{15})/$',
-        protocolo,
-        name='core.protocolo'
+        ficha_protocolo,
+        name='core.ficha_protocolo'
         ),
 ]

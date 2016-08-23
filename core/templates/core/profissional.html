@@ -2,6 +2,14 @@
 {% block title %}Lista de Profissionais AB{% endblock title %}
 {% block body %}
 	{% if v1 == 'protocolo' %}
+		<p>
+			<button type="button"
+					class="btn btn-primary btn-lg btn-block"
+					onclick=
+						"location.href='{% url 'core.capa_protocolo' v1 v2 %}'">
+				Capa				
+			</button>
+		</p>
 	<div class="row">
 	{% for list in profissional_list %}
 	{% if list.equipe.ine %}
@@ -9,7 +17,7 @@
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
 					onclick=
-						"location.href='{% url 'core.protocolo' v1 list.equipe.ine list.cns %}'">
+						"location.href='{% url 'core.ficha_protocolo' v1 list.equipe.ine list.cns %}'">
 				{{ list }}				
 			</button>
 		</p>
@@ -18,7 +26,7 @@
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
 					onclick=
-						"location.href='{% url 'core.protocolo' v1 list.equipe.nome list.cns %}'">
+						"location.href='{% url 'core.ficha_protocolo' v1 list.equipe.nome list.cns %}'">
 				{{ list }}				
 			</button>
 		</p>
