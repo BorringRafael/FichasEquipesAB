@@ -11,10 +11,6 @@ h1 {
 	color: #0000FF !important;
 	font-family: "Times New Roman", Times, serif;
 }
-.vertical-align {
-  display: flex;
-  flex-direction: row;
-}
 .info {
 	font-size: 20px;
 	font-weight: bold;

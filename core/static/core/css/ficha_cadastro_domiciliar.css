@@ -1,0 +1,35 @@
+@page {
+	size: a4 !important;
+	margin: 0.5cm !important;
+}
+img {
+	width: 19.5cm !important;
+	height: 27.2cm !important;
+}
+.nome {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +0.3cm !important;
+	margin-left: +0.8cm !important;
+}
+.cns {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.48cm !important;
+	margin-left: +0.95cm !important;
+	letter-spacing: 0.237cm !important;
+}
+.cnes {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.48cm !important;
+	margin-left: +7.6cm !important;
+	letter-spacing: 0.248cm !important;
+}
+.ine {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.48cm !important;
+	margin-left: +10.85cm !important;
+	letter-spacing: 0.213cm !important;
+}

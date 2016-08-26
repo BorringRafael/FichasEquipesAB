@@ -1,12 +1,12 @@
 {% extends "core/base.html" %}
 {% block title %}Lista de Profissionais AB{% endblock title %}
 {% block body %}
-	{% if v1 == 'protocolo' %}
+	{% if v1 == "protocolo" %}
 		<p>
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
 					onclick=
-						"location.href='{% url 'core.capa_protocolo' v1 v2 %}'">
+						"location.href='{% url 'core.capa_protocolo' v2 %}'">
 				Capa				
 			</button>
 		</p>
@@ -17,7 +17,7 @@
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
 					onclick=
-						"location.href='{% url 'core.ficha_protocolo' v1 list.equipe.ine list.cns %}'">
+						"location.href='{% url 'core.ficha_protocolo' list.equipe.ine list.cns %}'">
 				{{ list }}				
 			</button>
 		</p>
@@ -26,7 +26,31 @@
 			<button type="button"
 					class="btn btn-primary btn-lg btn-block"
 					onclick=
-						"location.href='{% url 'core.ficha_protocolo' v1 list.equipe.nome list.cns %}'">
+						"location.href='{% url 'core.ficha_protocolo' list.equipe.nome list.cns %}'">
+				{{ list }}				
+			</button>
+		</p>
+	{% endif %}
+	{% endfor %}
+	</div>
+	{% elif v1 == "esus" %}
+	<div class="row">
+	{% for list in profissional_list %}
+	{% if list.equipe.ine %}
+		<p>
+			<button type="button"
+					class="btn btn-primary btn-lg btn-block"
+					onclick=
+						"location.href='{% url 'core.lista_ficha_esus' list.equipe.ine list.cns %}'">
+				{{ list }}				
+			</button>
+		</p>
+	{% else %}
+		<p>
+			<button type="button"
+					class="btn btn-primary btn-lg btn-block"
+					onclick=
+						"location.href='{% url 'core.lista_ficha_esus' list.equipe.nome list.cns %}'">
 				{{ list }}				
 			</button>
 		</p>

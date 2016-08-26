@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block style %}
+{{ block.super }}
+	<link href="{% static 'core/css/ficha_de_procedimentos.css' %}" rel="stylesheet">
+{% endblock style %}
+{% block title %}Ficha de Procedimentos{% endblock title %}
+{% block body %}
+	<div class="row">
+		<div class="nome">
+			{{ profissional_filter.nome }} - {{ profissional_filter.cbo.nome }}
+		</div>
+		<div class="cns">
+			{{ profissional_filter.cns }}
+		</div>
+		<div class="cbo1">
+			{{ profissional_filter.cbo.cbo|slice:":4" }}
+		</div>
+		<div class="cbo2">
+			{{ profissional_filter.cbo.cbo|slice:"4:" }}
+		</div>
+		<div class="cnes">
+			{{ profissional_filter.equipe.unidade.cnes }}
+		</div>
+		<div class="ine">
+			{{ profissional_filter.equipe.ine }}
+		</div>
+		<img src="{% static 'core/img/ficha_de_procedimentos-0.png' %}"/>
+	</div>
+	<div style="page-break-after: always"></div>
+	<div class="row">
+		<img src="{% static 'core/img/ficha_de_procedimentos-1.png' %}"/>
+	</div>
+{% endblock body %}

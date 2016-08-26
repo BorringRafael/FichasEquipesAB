@@ -1,0 +1,49 @@
+@page {
+	size: landscape !important;
+	margin: 0.5cm !important;
+}
+img {
+	width: 27.2cm !important;
+	height: 19.5cm !important;
+}
+.nome {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +0.3cm !important;
+	margin-left: +0.8cm !important;
+}
+.cns {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.33cm !important;
+	margin-left: +0.85cm !important;
+	letter-spacing: 0.21cm !important;
+}
+.cbo1 {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.33cm !important;
+	margin-left: +6.4cm !important;
+	letter-spacing: 0.27cm !important;
+}
+.cbo2 {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.33cm !important;
+	margin-left: +8.1cm !important;
+	letter-spacing: 0.27cm !important;
+}
+.cnes {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.33cm !important;
+	margin-left: +11.4cm !important;
+	letter-spacing: 0.233cm !important;
+}
+.ine {
+	font-size: 0.25cm !important;
+	position: absolute !important;
+	margin-top: +3.33cm !important;
+	margin-left: +16.4cm !important;
+	letter-spacing: 0.21cm !important;
+}

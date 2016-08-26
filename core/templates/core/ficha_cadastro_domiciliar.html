@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block style %}
+{{ block.super }}
+	<link href="{% static 'core/css/ficha_cadastro_domiciliar.css' %}" rel="stylesheet">
+{% endblock style %}
+{% block title %}Ficha de Cadastro Domiciliar{% endblock title %}
+{% block body %}
+	<div class="row">
+		<div class="nome">
+			{{ profissional_filter.nome }} - {{ profissional_filter.cbo.nome }}
+		</div>
+		<div class="cns">
+			{{ profissional_filter.cns }}
+		</div>
+		<div class="cnes">
+			{{ profissional_filter.equipe.unidade.cnes }}
+		</div>
+		<div class="ine">
+			{{ profissional_filter.equipe.ine }}
+		</div>
+		<img src="{% static 'core/img/ficha_cadastro_domiciliar.png' %}"/>
+	</div>
+{% endblock body %}
