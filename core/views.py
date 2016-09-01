@@ -1,5 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.staticfiles.finders import find
+
 from .models import Equipe, Profissional
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
 
 
 def equipe(request, v1):
@@ -23,13 +30,23 @@ def profissional(request, v1, v2):
 
 
 def capa_protocolo(request, v1, v2):
+    '''Capa das fichas de protocolo'''
     if Equipe.objects.filter(ine=v2).exists():
         equipe = Equipe.objects.filter(ine=v2)
     else:
         equipe = Equipe.objects.filter(nome=v2)
-    return render(request, 'core/capa_protocolo.html', {
-                'equipe': equipe,
-                })
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="capa_protocolo.pdf"'
+    pdf = canvas.Canvas(response, pagesize=A4)
+    pdf.drawImage(find('core/img/capa_protocolo.png'), 0, 0, 21*cm, 29.7*cm)
+    for value in equipe:
+        pdf.drawCentredString(10.5*cm, 2*cm, value.unidade.nome)
+        pdf.drawString(2*cm, 1.1*cm, value.nome)
+        pdf.drawString(11.1*cm, 1.1*cm, value.area)
+        pdf.drawString(16.1*cm, 1.1*cm, value.ine)
+    pdf.showPage()
+    pdf.save()
+    return response
 
 
 def ficha_protocolo(request, v1, v2, v3):
