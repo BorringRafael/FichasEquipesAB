@@ -32,18 +32,18 @@ def profissional(request, v1, v2):
 def capa_protocolo(request, v1, v2):
     '''Capa das fichas de protocolo'''
     if Equipe.objects.filter(ine=v2).exists():
-        equipe = Equipe.objects.filter(ine=v2)
+        equipe = Equipe.objects.get(ine=v2)
     else:
-        equipe = Equipe.objects.filter(nome=v2)
+        equipe = Equipe.objects.get(nome=v2)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="capa_protocolo.pdf"'
+    response['Content-Disposition'] = 'inline;\
+        filename="%s_capa_protocolo.pdf"' % equipe.nome
     pdf = canvas.Canvas(response, pagesize=A4)
     pdf.drawImage(find('core/img/capa_protocolo.png'), 0, 0, 21*cm, 29.7*cm)
-    for value in equipe:
-        pdf.drawCentredString(10.5*cm, 2*cm, value.unidade.nome)
-        pdf.drawString(2*cm, 1.1*cm, value.nome)
-        pdf.drawString(11.1*cm, 1.1*cm, value.area)
-        pdf.drawString(16.1*cm, 1.1*cm, value.ine)
+    pdf.drawCentredString(10.5*cm, 2*cm, equipe.unidade.nome)
+    pdf.drawString(2*cm, 1.1*cm, equipe.nome)
+    pdf.drawString(11.1*cm, 1.1*cm, equipe.area)
+    pdf.drawString(16.1*cm, 1.1*cm, equipe.ine)
     pdf.showPage()
     pdf.save()
     return response
@@ -51,11 +51,21 @@ def capa_protocolo(request, v1, v2):
 
 def ficha_protocolo(request, v1, v2, v3):
     profissional_filter = Profissional.objects.get(cns=v3)
-    return render(request, 'core/ficha_protocolo.html', {
-                'profissional_filter': profissional_filter,
-                'v1': v1,
-                'linha': range(0, 56)
-                })
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline;\
+        filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+    pdf = canvas.Canvas(response, pagesize=A4)
+    pdf.drawImage(find('core/img/ficha_protocolo-0.png'), 0, 0, 21*cm, 29.7*cm)
+    pdf.drawString(2.1*cm, 25.75*cm, profissional_filter.equipe.nome)
+    pdf.drawString(11.4*cm, 25.75*cm, profissional_filter.equipe.ine)
+    pdf.drawString(16.8*cm, 25.75*cm, profissional_filter.equipe.unidade.cnes)
+    pdf.drawString(2.9*cm, 24.85*cm, profissional_filter.nome)
+    pdf.drawString(13.7*cm, 24.85*cm, profissional_filter.cns)
+    pdf.showPage()
+    pdf.drawImage(find('core/img/ficha_protocolo-1.png'), 0, 0, 21*cm, 29.7*cm)
+    pdf.showPage()
+    pdf.save()
+    return response
 
 
 def lista_ficha_esus(request, v1, v2, v3):
