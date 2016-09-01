@@ -7,6 +7,7 @@ from .models import Equipe, Profissional
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
+from reportlab.lib.colors import white, black
 
 
 def equipe(request, v1):
@@ -111,13 +112,63 @@ def ficha_esus(request, v1, v2, v3, v4):
     profissional_list = Profissional.objects.filter(equipe__ine=v2)
     profissional_filter = Profissional.objects.get(cns=v3)
     if v4 == 'ficha_atendimento_individual':
-        return render(request, 'core/ficha_atendimento_individual.html', {
-                    'profissional_filter': profissional_filter,
-                    })
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;\
+            filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+        pdf = canvas.Canvas(response, pagesize=A4)
+        pdf.drawImage(
+                      find('core/img/ficha_atendimento_individual-0.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.setFillColor(white)
+        pdf.rect(0.8*cm, 25.71*cm, 6*cm, 0.9*cm, stroke=False, fill=True)
+        pdf.rect(6.95*cm, 25.71*cm, 2.75*cm, 0.4*cm, stroke=False, fill=True)
+        pdf.rect(9.9*cm, 25.71*cm, 2.75*cm, 0.4*cm, stroke=False, fill=True)
+        pdf.rect(12.8*cm, 25.71*cm, 4*cm, 0.4*cm, stroke=False, fill=True)
+        pdf.setFillColor(black)
+        pdf.setFontSize(0.2*cm)
+        pdf.drawString(0.8*cm, 26.4*cm, profissional_filter.nome)
+        pdf.setFontSize(0.5*cm)
+        pdf.drawString(0.8*cm, 25.71*cm, profissional_filter.cns)
+        pdf.drawString(6.95*cm, 25.71*cm, profissional_filter.cbo.cbo)
+        pdf.drawString(9.9*cm, 25.71*cm,
+                       profissional_filter.equipe.unidade.cnes)
+        pdf.drawString(12.8*cm, 25.71*cm, profissional_filter.equipe.ine)
+        pdf.showPage()
+        pdf.drawImage(
+                      find('core/img/ficha_atendimento_individual-1.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.showPage()
+        pdf.save()
+        return response
     elif v4 == 'ficha_atividade':
-        return render(request, 'core/ficha_atividade.html', {
-                    'profissional_filter': profissional_filter,
-                    })
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;\
+            filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+        pdf = canvas.Canvas(response, pagesize=A4)
+        pdf.drawImage(find('core/img/ficha_atividade-0.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.setFillColor(white)
+        pdf.rect(8.699*cm, 22.35*cm, 7.31*cm, 3.55*cm, stroke=False, fill=True)
+        pdf.rect(16.03*cm, 22.35*cm, 4.39*cm, 3.55*cm, stroke=False, fill=True)
+        pdf.rect(0.7*cm, 1.1*cm, 5.3*cm, 0.45*cm, stroke=False, fill=True)
+        pdf.rect(6.2*cm, 1.1*cm, 2.5*cm, 0.45*cm, stroke=False, fill=True)
+        pdf.rect(8.85*cm, 1.1*cm, 3.6*cm, 0.45*cm, stroke=False, fill=True)
+        pdf.setFillColor(black)
+        pdf.setFontSize(0.2*cm)
+        pdf.drawString(10.6*cm, 25.7*cm, profissional_filter.nome)
+        pdf.drawString(8.8*cm, 25.7*cm, profissional_filter.cns)
+        pdf.drawString(16.2*cm, 25.7*cm, profissional_filter.cbo.cbo)
+        pdf.drawString(0.7*cm, 1.6*cm, profissional_filter.nome)
+        pdf.setFontSize(0.5*cm)
+        pdf.drawString(0.7*cm, 1.1*cm, profissional_filter.cns)
+        pdf.drawString(6.2*cm, 1.1*cm, profissional_filter.equipe.unidade.cnes)
+        pdf.drawString(8.85*cm, 1.1*cm, profissional_filter.equipe.ine)
+        pdf.showPage()
+        pdf.drawImage(find('core/img/ficha_atividade-1.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.showPage()
+        pdf.save()
+        return response
     elif v4 == 'ficha_cadastro_domiciliar':
         return render(request, 'core/ficha_cadastro_domiciliar.html', {
                     'profissional_filter': profissional_filter,
