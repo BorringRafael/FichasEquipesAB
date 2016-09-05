@@ -1,61 +1,47 @@
 {% extends "core/base.html" %}
-{% block title %}Lista de Profissionais AB{% endblock title %}
+{% block title %}Lista de Profissionais AB{% endblock %}
 {% block body %}
-	{% if v1 == "protocolo" %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.capa_protocolo' v2 %}'">
-				Capa				
-			</button>
-		</p>
 	<div class="row">
-	{% for list in profissional_list %}
-	{% if list.equipe.ine %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_protocolo' list.equipe.ine list.cns %}'">
-				{{ list }}				
-			</button>
-		</p>
-	{% else %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_protocolo' list.equipe.nome list.cns %}'">
-				{{ list }}				
-			</button>
-		</p>
-	{% endif %}
-	{% endfor %}
+		{% if v1 == "protocolo" %}
+			<p>
+				<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ v2 }}">Capa</button>
+			</p>
+			<div id="{{ v2 }}" class="modal text-center">
+				<object type="application/pdf" data="{% url 'core.capa_protocolo' v2 %}#zoom=page-width" width="50%" height="95%"></object>
+			</div>
+			{% for list in profissional_list %}
+				{% if list.equipe.ine %}
+					<p>
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">{{ list }}</button>
+					</p>
+					<div id="{{ list.cns }}" class="modal text-center">
+						<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.ine list.cns %}#zoom=page-width" width="50%" height="95%"></object>
+					</div>
+				{% else %}
+					<p>
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">{{ list }}</button>
+					</p>
+					<div id="{{ list.cns }}" class="modal text-center">
+						<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.nome list.cns %}#zoom=page-width" width="50%" height="95%"></object>
+					</div>
+				{% endif %}
+			{% endfor %}
+		{% elif v1 == "esus" %}
+			{% for list in profissional_list %}
+				{% if list.equipe.ine %}
+					<p>
+						<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='{% url 'core.lista_ficha_esus' list.equipe.ine list.cns %}'">
+							{{ list }}				
+						</button>
+					</p>
+				{% else %}
+					<p>
+						<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='{% url 'core.lista_ficha_esus' list.equipe.nome list.cns %}'">
+							{{ list }}				
+						</button>
+					</p>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
 	</div>
-	{% elif v1 == "esus" %}
-	<div class="row">
-	{% for list in profissional_list %}
-	{% if list.equipe.ine %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.lista_ficha_esus' list.equipe.ine list.cns %}'">
-				{{ list }}				
-			</button>
-		</p>
-	{% else %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.lista_ficha_esus' list.equipe.nome list.cns %}'">
-				{{ list }}				
-			</button>
-		</p>
-	{% endif %}
-	{% endfor %}
-	</div>
-	{% endif %}
-{% endblock body %}
+{% endblock %}

@@ -1,74 +1,125 @@
 {% extends "core/base.html" %}
-{% block title %}Lista de Profissionais AB{% endblock title %}
+{% block title %}Lista de Profissionais AB{% endblock %}
 {% block body %}
-	{% if pro_cbo in nivel_superior %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_atendimento_individual' %}'">
-				Ficha de Atendimento Individual			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo in cbo.values %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_atividade' %}'">
-				Ficha de Atividade Coletiva			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo == cbo.acs %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_cadastro_domiciliar' %}'">
-				Ficha de Cadastro Domiciliar			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo == cbo.acs %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_cadastro_individual' %}'">
-				Ficha de Cadastro Individual			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo != cbo.acs and pro_cbo != cbo.dentista and pro_cbo != cbo.aux_saude_bucal %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_de_procedimentos' %}'">
-				Ficha de Procedimentos			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo == cbo.acs %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_de_visitas_domiciliar' %}'">
-				Ficha de Visita Domiciliar			
-			</button>
-		</p>
-	{% endif %}
-	{% if pro_cbo == cbo.dentista %}
-		<p>
-			<button type="button"
-					class="btn btn-primary btn-lg btn-block"
-					onclick=
-						"location.href='{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_individual_odontologico' %}'">
-				Ficha de Atendimento Individual	Odontológico		
-			</button>
-		</p>
-	{% endif %}
+	<div class=row>
+		{% if pro_cbo in nivel_superior %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_atendimento_individual">Ficha de Atendimento Individual</button>
+				</p>
+				<div id="ficha_atendimento_individual" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_atendimento_individual' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_atendimento_individual">Ficha de Atendimento Individual</button>
+				</p>
+				<div id="ficha_atendimento_individual" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_atendimento_individual' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo in cbo.values %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_atividade">Ficha de Atividade Coletiva</button>
+				</p>
+				<div id="ficha_atividade" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_atividade' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_atividade">Ficha de Atividade Coletiva</button>
+				</p>
+				<div id="ficha_atividade" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_atividade' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo == cbo.acs %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_cadastro_domiciliar">Ficha de Cadastro Domiciliar</button>
+				</p>
+				<div id="ficha_cadastro_domiciliar" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_cadastro_domiciliar' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_cadastro_domiciliar">Ficha de Cadastro Domiciliar</button>
+				</p>
+				<div id="ficha_cadastro_domiciliar" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_cadastro_domiciliar' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo == cbo.acs %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_cadastro_individual">Ficha de Cadastro Individual</button>
+				</p>
+				<div id="ficha_cadastro_individual" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_cadastro_individual' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_cadastro_individual">Ficha de Cadastro Individual</button>
+				</p>
+				<div id="ficha_cadastro_individual" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_cadastro_individual' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo != cbo.acs and pro_cbo != cbo.dentista and pro_cbo != cbo.aux_saude_bucal %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_de_procedimentos">Ficha de Procedimentos</button>
+				</p>
+				<div id="ficha_de_procedimentos" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_de_procedimentos' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_de_procedimentos">Ficha de Procedimentos</button>
+				</p>
+				<div id="ficha_de_procedimentos" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_de_procedimentos' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo == cbo.acs %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_de_visitas_domiciliar">Ficha de Visita Domiciliar</button>
+				</p>
+				<div id="ficha_de_visitas_domiciliar" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_de_visitas_domiciliar' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_de_visitas_domiciliar">Ficha de Visita Domiciliar</button>
+				</p>
+				<div id="ficha_de_visitas_domiciliar" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_de_visitas_domiciliar' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+		{% if pro_cbo == cbo.dentista %}
+			{% if profissional_filter.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_individual_odontologico">Ficha de Atendimento Individual Odontológico</button>
+				</p>
+				<div id="ficha_individual_odontologico" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.ine profissional_filter.cns 'ficha_individual_odontologico' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% else %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#ficha_individual_odontologico">Ficha de Atendimento Individual Odontológico</button>
+				</p>
+				<div id="ficha_individual_odontologico" class="modal text-center">
+					<object type="application/pdf" data="{% url 'core.ficha_esus' profissional_filter.equipe.nome profissional_filter.cns 'ficha_individual_odontologico' %}#zoom=page-width" width="50%" height="95%"></object>
+				</div>
+			{% endif %}
+		{% endif %}
+	</div>
 {% endblock %}
