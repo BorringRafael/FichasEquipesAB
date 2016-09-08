@@ -2,6 +2,18 @@ from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 
+FICHAS = [
+          ('ficha_atendimento_individual', 'Ficha de Atendimento Individual'),
+          ('ficha_atividade', 'Ficha de Atividade Coletiva'),
+          ('ficha_cadastro_domiciliar', 'Ficha de Cadastro Domiciliar'),
+          ('ficha_cadastro_individual', 'Ficha de Cadastro Individual'),
+          ('ficha_de_procedimentos', 'Ficha de Procedimentos'),
+          ('ficha_de_visitas_domiciliar', 'Ficha de Visita Domiciliar'),
+          ('ficha_individual_odontologico',
+           'Ficha de Atendimento Odontológico Individual'),
+          ]
+
+
 class Unidade(models.Model):
     # Tabela de unidades cadastradas.
     nome = models.CharField(
@@ -31,6 +43,7 @@ class Equipe(models.Model):
     nome = models.CharField(
         'Nome',
         max_length=256,
+        unique=True,
         )
     area = models.CharField(
         'Área',
@@ -97,6 +110,7 @@ class CBO(models.Model):
     nome = models.CharField(
         'Nome',
         max_length=256,
+        unique=True,
         )
     cbo = models.CharField(
         'CBO',
@@ -114,3 +128,23 @@ class CBO(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.cbo, self.nome)
+
+
+class Auth_CBO(models.Model):
+    # Autorização de CBOs.
+    nome = models.CharField(
+        'Nome',
+        max_length=256,
+        unique=True,
+        choices=FICHAS,
+        )
+    cbo = models.ManyToManyField(
+        'CBO',
+        )
+
+    class Meta:
+        verbose_name = 'Autorização de Ficha'
+        verbose_name_plural = 'Autorizações de Fichas'
+
+    def __str__(self):
+        return '%s' % (self.get_nome_display())

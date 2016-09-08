@@ -4,25 +4,61 @@
 	<div class="row">
 		{% if v1 == "protocolo" %}
 			<p>
-				<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ v2 }}">Capa</button>
+				<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ v2 }}">
+					Capa
+				</button>
 			</p>
 			<div id="{{ v2 }}" class="modal text-center">
-				<object type="application/pdf" data="{% url 'core.capa_protocolo' v2 %}#zoom=page-width" width="50%" height="95%"></object>
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Capa</h4>
+						</div>
+						<div class="modal-body" style="height: 75vh;">
+							<object type="application/pdf" data="{% url 'core.capa_protocolo' v2 %}#zoom=page-width" width="100%" height="100%"></object>
+						</div>
+					</div>
+				</div>
 			</div>
 			{% for list in profissional_list %}
 				{% if list.equipe.ine %}
 					<p>
-						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">{{ list }}</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">
+							{{ list.nome }} - {{ list.cbo.nome }}
+						</button>
 					</p>
 					<div id="{{ list.cns }}" class="modal text-center">
-						<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.ine list.cns %}#zoom=page-width" width="50%" height="95%"></object>
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">{{ list.nome }}</h4>
+								</div>
+								<div class="modal-body" style="height: 75vh;">
+									<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.ine list.cns %}#zoom=page-width" width="100%" height="100%"></object>
+								</div>
+							</div>
+						</div>
 					</div>
 				{% else %}
 					<p>
-						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">{{ list }}</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">
+							{{ list.nome }} - {{ list.cbo.nome }}
+						</button>
 					</p>
 					<div id="{{ list.cns }}" class="modal text-center">
-						<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.nome list.cns %}#zoom=page-width" width="50%" height="95%"></object>
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">{{ list.nome }}</h4>
+								</div>
+								<div class="modal-body" style="height: 75vh;">
+									<object type="application/pdf" data="{% url 'core.ficha_protocolo' list.equipe.nome list.cns %}#zoom=page-width" width="100%" height="100%"></object>
+								</div>
+							</div>
+						</div>
 					</div>
 				{% endif %}
 			{% endfor %}
@@ -31,13 +67,13 @@
 				{% if list.equipe.ine %}
 					<p>
 						<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='{% url 'core.lista_ficha_esus' list.equipe.ine list.cns %}'">
-							{{ list }}				
+							{{ list.nome }} - {{ list.cbo.nome }}				
 						</button>
 					</p>
 				{% else %}
 					<p>
 						<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='{% url 'core.lista_ficha_esus' list.equipe.nome list.cns %}'">
-							{{ list }}				
+							{{ list.nome }} - {{ list.cbo.nome }}				
 						</button>
 					</p>
 				{% endif %}

@@ -2,44 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.staticfiles.finders import find
 
-from .models import Equipe, Profissional
+from .models import Equipe, Profissional, Auth_CBO
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
 from reportlab.lib.colors import white, black
-
-
-cbo = {
-       'acs': '515105',
-       'aux_enfermagem': '322250',
-       'aux_saude_bucal': '322430',
-       'dentista': '223293',
-       'enfermeiro': '223565',
-       'medico': '225142',
-       'tec_enfermagem': '322245',
-       'ass_social': '251605',
-       'nutricionista': '223710',
-       'psicologo': '251510',
-       'fisioterapeuta': '223605',
-       'educador_fisico': '22410',
-       }
-
-nivel_superior = [
-                  cbo['enfermeiro'],
-                  cbo['medico'],
-                  cbo['ass_social'],
-                  cbo['nutricionista'],
-                  cbo['fisioterapeuta'],
-                  cbo['educador_fisico'],
-                  ]
-
-nivel_medio = [
-               cbo['acs'],
-               cbo['aux_enfermagem'],
-               cbo['aux_saude_bucal'],
-               cbo['tec_enfermagem'],
-               ]
 
 
 def equipe(request, v1):
@@ -107,12 +75,11 @@ def ficha_protocolo(request, v1, v2, v3):
 def lista_ficha_esus(request, v1, v2, v3):
     '''Listar Fichas e-SUS-AB'''
     profissional_filter = Profissional.objects.get(cns=v3)
+    auth_cbo = Auth_CBO.objects.all()
     return render(request, 'core/ficha_esus.html', {
                 'profissional_filter': profissional_filter,
                 'pro_cbo': profissional_filter.cbo.cbo,
-                'cbo': cbo,
-                'nivel_superior': nivel_superior,
-                'nivel_medio': nivel_medio,
+                'auth_cbo': auth_cbo,
                 })
 
 
@@ -120,8 +87,13 @@ def ficha_esus(request, v1, v2, v3, v4):
     '''Fichas e-SUS-AB'''
     profissional_list = Profissional.objects.filter(equipe__ine=v2)
     profissional_filter = Profissional.objects.get(cns=v3)
+    auth_cbo = Auth_CBO.objects.all()
+    message = 'Ficha não disponível para %s' % profissional_filter.cbo.nome
     if v4 == 'ficha_atendimento_individual':
-        if profissional_filter.cbo.cbo in nivel_superior:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -153,38 +125,50 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
         else:
-            return HttpResponse('Esse profissional não usa essa ficha!')
+            return HttpResponse(message)
     elif v4 == 'ficha_atividade':
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'inline;\
-            filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
-        pdf = canvas.Canvas(response, pagesize=A4)
-        pdf.drawImage(find('core/img/ficha_atividade-0.png'),
-                      0, 0, 21*cm, 29.7*cm)
-        pdf.setFillColor(white)
-        pdf.rect(8.699*cm, 22.35*cm, 7.31*cm, 3.55*cm, stroke=False, fill=True)
-        pdf.rect(16.03*cm, 22.35*cm, 4.39*cm, 3.55*cm, stroke=False, fill=True)
-        pdf.rect(0.7*cm, 1.1*cm, 5.3*cm, 0.45*cm, stroke=False, fill=True)
-        pdf.rect(6.2*cm, 1.1*cm, 2.5*cm, 0.45*cm, stroke=False, fill=True)
-        pdf.rect(8.85*cm, 1.1*cm, 3.6*cm, 0.45*cm, stroke=False, fill=True)
-        pdf.setFillColor(black)
-        pdf.setFontSize(0.2*cm)
-        pdf.drawString(10.6*cm, 25.7*cm, profissional_filter.nome)
-        pdf.drawString(8.8*cm, 25.7*cm, profissional_filter.cns)
-        pdf.drawString(16.2*cm, 25.7*cm, profissional_filter.cbo.cbo)
-        pdf.drawString(0.7*cm, 1.6*cm, profissional_filter.nome)
-        pdf.setFontSize(0.5*cm)
-        pdf.drawString(0.7*cm, 1.1*cm, profissional_filter.cns)
-        pdf.drawString(6.2*cm, 1.1*cm, profissional_filter.equipe.unidade.cnes)
-        pdf.drawString(8.85*cm, 1.1*cm, profissional_filter.equipe.ine)
-        pdf.showPage()
-        pdf.drawImage(find('core/img/ficha_atividade-1.png'),
-                      0, 0, 21*cm, 29.7*cm)
-        pdf.showPage()
-        pdf.save()
-        return response
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline;\
+                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+            pdf = canvas.Canvas(response, pagesize=A4)
+            pdf.drawImage(find('core/img/ficha_atividade-0.png'),
+                          0, 0, 21*cm, 29.7*cm)
+            pdf.setFillColor(white)
+            pdf.rect(8.699*cm, 22.35*cm, 7.31*cm, 3.55*cm, stroke=False,
+                     fill=True)
+            pdf.rect(16.03*cm, 22.35*cm, 4.39*cm, 3.55*cm, stroke=False,
+                     fill=True)
+            pdf.rect(0.7*cm, 1.1*cm, 5.3*cm, 0.45*cm, stroke=False, fill=True)
+            pdf.rect(6.2*cm, 1.1*cm, 2.5*cm, 0.45*cm, stroke=False, fill=True)
+            pdf.rect(8.85*cm, 1.1*cm, 3.6*cm, 0.45*cm, stroke=False, fill=True)
+            pdf.setFillColor(black)
+            pdf.setFontSize(0.2*cm)
+            pdf.drawString(10.6*cm, 25.7*cm, profissional_filter.nome)
+            pdf.drawString(8.8*cm, 25.7*cm, profissional_filter.cns)
+            pdf.drawString(16.2*cm, 25.7*cm, profissional_filter.cbo.cbo)
+            pdf.drawString(0.7*cm, 1.6*cm, profissional_filter.nome)
+            pdf.setFontSize(0.5*cm)
+            pdf.drawString(0.7*cm, 1.1*cm, profissional_filter.cns)
+            pdf.drawString(6.2*cm, 1.1*cm,
+                           profissional_filter.equipe.unidade.cnes)
+            pdf.drawString(8.85*cm, 1.1*cm, profissional_filter.equipe.ine)
+            pdf.showPage()
+            pdf.drawImage(find('core/img/ficha_atividade-1.png'),
+                          0, 0, 21*cm, 29.7*cm)
+            pdf.showPage()
+            pdf.save()
+            return response
+        else:
+            return HttpResponse(message)
     elif v4 == 'ficha_cadastro_domiciliar':
-        if profissional_filter.cbo.cbo == cbo['acs']:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -208,9 +192,12 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
         else:
-            return HttpResponse('Esse profissional não usa essa ficha!')
+            return HttpResponse(message)
     elif v4 == 'ficha_cadastro_individual':
-        if profissional_filter.cbo.cbo == cbo['acs']:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -237,13 +224,12 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
         else:
-            return HttpResponse('Esse profissional não usa essa ficha!')
+            return HttpResponse(message)
     elif v4 == 'ficha_de_procedimentos':
-        if profissional_filter.cbo.cbo in nivel_superior\
-            or profissional_filter.cbo.cbo in [
-                                           cbo['aux_enfermagem'],
-                                           cbo['tec_enfermagem'],
-                                           ]:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -275,7 +261,10 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
     elif v4 == 'ficha_de_visitas_domiciliar':
-        if profissional_filter.cbo.cbo == cbo['acs']:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -307,9 +296,12 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
         else:
-            return HttpResponse('Esse profissional não usa essa ficha!')
+            return HttpResponse(message)
     elif v4 == 'ficha_individual_odontologico':
-        if profissional_filter.cbo.cbo == cbo['dentista']:
+        if auth_cbo.filter(
+                           nome=v4,
+                           cbo__cbo=profissional_filter.cbo.cbo,
+                           ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
                 filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
@@ -337,7 +329,7 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.drawString(10*cm, 25.71*cm, profissional_filter.equipe.ine)
             pdf.drawString(14.25*cm, 25.71*cm, profissional_filter.cbo.cbo)
             for value in profissional_list:
-                if value.cbo.cbo == cbo['aux_saude_bucal']:
+                if value.cbo.cbo == '322430':
                     pdf.setFontSize(0.2*cm)
                     pdf.drawString(0.8*cm, 25.4*cm, value.nome)
                     pdf.setFontSize(0.5*cm)
@@ -351,4 +343,4 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.save()
             return response
         else:
-            return HttpResponse('Esse profissional não usa essa ficha!')
+            return HttpResponse(message)
