@@ -21,7 +21,7 @@
 					</div>
 				</div>
 			</div>
-			{% for list in profissional_list %}
+			{% for list in profissional_list|dictsort:'nome' %}
 				{% if list.equipe.ine %}
 					<p>
 						<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ list.cns }}">
@@ -63,7 +63,7 @@
 				{% endif %}
 			{% endfor %}
 		{% elif v1 == "esus" %}
-			{% for list in profissional_list %}
+			{% for list in profissional_list|dictsort:'nome' %}
 				{% if list.equipe.ine %}
 					<p>
 						<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='{% url 'core.lista_ficha_esus' list.equipe.ine list.cns %}'">

@@ -2,7 +2,7 @@
 {% block title %}Lista de Equipes AB{% endblock %}
 {% block body %}
 	<div class="row">
-		{% for list in equipe_list %}
+		{% for list in equipe_list|dictsort:'area' %}
 			{% if list.ine %}
 				<p>
 					<button type="button"
