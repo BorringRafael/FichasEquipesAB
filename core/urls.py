@@ -47,6 +47,12 @@ urlpatterns = [
         name='core.ficha_protocolo',
         ),
     url(
+        r'^esus/atividade/(?P<v2>\w+)/$',
+        ficha_atividade,
+        {"v1": "protocolo"},
+        name='core.ficha_atividade',
+        ),
+    url(
         r'^esus/profissional/(?P<v2>\w+)/(?P<v3>\d{15})/$',
         lista_ficha_esus,
         {"v1": "esus"},

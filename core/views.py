@@ -72,6 +72,42 @@ def ficha_protocolo(request, v1, v2, v3):
     return response
 
 
+def ficha_atividade(request, v1, v2):
+    '''Ficha de Atividade Coletiva da Equipe'''
+    message = 'Ficha usada apenas pelas equipes PSF'
+    if Equipe.objects.filter(ine=v2).exists():
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;\
+            filename="%s_ficha_atividade.pdf"' % v2
+        pdf = canvas.Canvas(response, pagesize=A4)
+        pdf.drawImage(find('core/img/ficha_atividade-0.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.setFillColor(white)
+        pdf.rect(8.699*cm, 22.35*cm, 7.31*cm, 3.55*cm, stroke=False,
+                 fill=True)
+        pdf.rect(16.03*cm, 22.35*cm, 4.39*cm, 3.55*cm, stroke=False,
+                 fill=True)
+        pdf.rect(0.7*cm, 1.1*cm, 5.3*cm, 0.45*cm, stroke=False, fill=True)
+        pdf.rect(6.2*cm, 1.1*cm, 2.5*cm, 0.45*cm, stroke=False, fill=True)
+        pdf.rect(8.85*cm, 1.1*cm, 3.6*cm, 0.45*cm, stroke=False, fill=True)
+        alt = 25.7*cm
+        for profissional_filter in Profissional.objects.filter(equipe__ine=v2):
+            pdf.setFillColor(black)
+            pdf.setFontSize(0.2*cm)
+            pdf.drawString(10.6*cm, alt, profissional_filter.nome)
+            pdf.drawString(8.8*cm, alt, profissional_filter.cns)
+            pdf.drawString(16.2*cm, alt, profissional_filter.cbo.cbo)
+            alt -= 6.0
+        pdf.showPage()
+        pdf.drawImage(find('core/img/ficha_atividade-1.png'),
+                      0, 0, 21*cm, 29.7*cm)
+        pdf.showPage()
+        pdf.save()
+        return response
+    else:
+        return HttpResponse(message)
+
+
 def lista_ficha_esus(request, v1, v2, v3):
     '''Listar Fichas e-SUS-AB'''
     profissional_filter = Profissional.objects.get(cns=v3)
@@ -96,7 +132,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_atendimento_individual.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
                           find('core/img/ficha_atendimento_individual-0.png'),
@@ -133,7 +170,7 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_atividade.pdf"' % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(find('core/img/ficha_atividade-0.png'),
                           0, 0, 21*cm, 29.7*cm)
@@ -171,7 +208,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_cadastro_domiciliar.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(find('core/img/ficha_cadastro_domiciliar.png'),
                           0, 0, 21*cm, 29.7*cm)
@@ -200,7 +238,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_cadastro_individual.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(find('core/img/ficha_cadastro_individual-0.png'),
                           0, 0, 21*cm, 29.7*cm)
@@ -232,7 +271,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_de_procedimentos.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
                           find('core/img/ficha_de_procedimentos-0.png'),
@@ -267,7 +307,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_de_visitas_domiciliar.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=landscape(A4))
             pdf.drawImage(
                           find('core/img/ficha_de_visitas_domiciliar-0.png'),
@@ -304,7 +345,8 @@ def ficha_esus(request, v1, v2, v3, v4):
                            ).exists():
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'inline;\
-                filename="%s_ficha_protocolo.pdf"' % profissional_filter.nome
+                filename="%s_ficha_individual_odontologico.pdf"'\
+                % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
                           find('core/img/ficha_individual_odontologico-0.png'),

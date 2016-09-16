@@ -63,6 +63,26 @@
 				{% endif %}
 			{% endfor %}
 		{% elif v1 == "esus" %}
+			{% if profissional_list.first.equipe.ine %}
+				<p>
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#{{ v2 }}">
+						Ficha de Atividade Coletiva
+					</button>
+				</p>
+				<div id="{{ v2 }}" class="modal text-center">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Ficha de Atividade Coletiva</h4>
+							</div>
+							<div class="modal-body" style="height: 75vh;">
+								<object type="application/pdf" data="{% url 'core.ficha_atividade' v2 %}#zoom=page-width" width="100%" height="100%"></object>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
 			{% for list in profissional_list|dictsort:'nome' %}
 				{% if list.equipe.ine %}
 					<p>
