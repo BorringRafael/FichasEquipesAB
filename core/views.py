@@ -7,7 +7,7 @@ from .models import Equipe, Profissional, Auth_CBO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
-from reportlab.lib.colors import white, black
+from reportlab.lib.colors import white, black, red
 
 
 def equipe(request, v1):
@@ -136,27 +136,48 @@ def ficha_esus(request, v1, v2, v3, v4):
                 % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
-                          find('core/img/ficha_atendimento_individual-0.png'),
+                          find('core/img/Ficha_de_Atendimento_Individual-0.png'),
                           0, 0, 21*cm, 29.7*cm)
+            """Retangulo"""
             pdf.setFillColor(white)
-            pdf.rect(0.8*cm, 25.71*cm, 6*cm, 0.9*cm, stroke=False, fill=True)
-            pdf.rect(6.95*cm, 25.71*cm, 2.75*cm, 0.4*cm, stroke=False,
+            """CNS"""
+            pdf.rect(0.8*cm, 25.71*cm, 6*cm, 0.85*cm, stroke=False, fill=True)
+            """CBO"""
+            pdf.rect(6.99*cm, 25.71*cm, 2.9*cm, 0.85*cm, stroke=False,
                      fill=True)
-            pdf.rect(9.9*cm, 25.71*cm, 2.75*cm, 0.4*cm, stroke=False,
+            """CNES"""
+            pdf.rect(10.1*cm, 25.71*cm, 2.9*cm, 0.85*cm, stroke=False,
                      fill=True)
-            pdf.rect(12.8*cm, 25.71*cm, 4*cm, 0.4*cm, stroke=False, fill=True)
+            """INE"""
+            pdf.rect(13.15*cm, 25.71*cm, 4.1*cm, 0.85*cm, stroke=False, fill=True)
+            """Dados"""
             pdf.setFillColor(black)
             pdf.setFontSize(0.2*cm)
+            """Nome Profissional"""
             pdf.drawString(0.8*cm, 26.4*cm, profissional_filter.nome)
+            """Nome CBO"""
+            pdf.drawString(6.95*cm, 26.4*cm, profissional_filter.cbo.nome)
+            """Nome CNES"""
+            pdf.drawString(10.1*cm, 26.4*cm,
+                           profissional_filter.equipe.unidade.nome)
+            """Número equipe"""
+            if profissional_filter.equipe.area:
+                pdf.drawString(13.15*cm, 26.4*cm, 'EQUIPE %s' % (profissional_filter.equipe.area))
+            else:
+                pdf.drawString(13.15*cm, 26.4*cm, 'NASF')
             pdf.setFontSize(0.5*cm)
+            """CNES"""
             pdf.drawString(0.8*cm, 25.71*cm, profissional_filter.cns)
+            """CBO"""
             pdf.drawString(6.95*cm, 25.71*cm, profissional_filter.cbo.cbo)
-            pdf.drawString(9.9*cm, 25.71*cm,
+            """CNES"""
+            pdf.drawString(10.1*cm, 25.71*cm,
                            profissional_filter.equipe.unidade.cnes)
-            pdf.drawString(12.8*cm, 25.71*cm, profissional_filter.equipe.ine)
+            """INE"""
+            pdf.drawString(13.15*cm, 25.71*cm, profissional_filter.equipe.ine)
             pdf.showPage()
             pdf.drawImage(
-                          find('core/img/ficha_atendimento_individual-1.png'),
+                          find('core/img/Ficha_de_Atendimento_Individual-1.png'),
                           0, 0, 21*cm, 29.7*cm)
             pdf.showPage()
             pdf.save()
@@ -275,27 +296,44 @@ def ficha_esus(request, v1, v2, v3, v4):
                 % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
-                          find('core/img/ficha_de_procedimentos-0.png'),
+                          find('core/img/Ficha_de_Procedimentos-0.png'),
                           0, 0, 21*cm, 29.7*cm)
+            """Retangulo"""
             pdf.setFillColor(white)
-            pdf.rect(0.8*cm, 25.77*cm, 6.2*cm, 0.9*cm, stroke=False, fill=True)
-            pdf.rect(7.25*cm, 25.77*cm, 2.9*cm, 0.4*cm, stroke=False,
+            """CNS"""
+            pdf.rect(0.88*cm, 25.8*cm, 5.9*cm, 0.9*cm, stroke=False, fill=True)
+            """CBO"""
+            pdf.rect(6.99*cm, 25.8*cm, 2.9*cm, 0.9*cm, stroke=False,
                      fill=True)
-            pdf.rect(10.3*cm, 25.77*cm, 3*cm, 0.4*cm, stroke=False, fill=True)
-            pdf.rect(13.55*cm, 25.77*cm, 4.3*cm, 0.4*cm, stroke=False,
+            """CNES"""
+            pdf.rect(10.1*cm, 25.8*cm, 2.9*cm, 0.9*cm, stroke=False,
                      fill=True)
+            """INE"""
+            pdf.rect(13.2*cm, 25.8*cm, 4*cm, 0.9*cm, stroke=False, fill=True)
             pdf.setFillColor(black)
             pdf.setFontSize(0.2*cm)
-            pdf.drawString(0.8*cm, 26.45*cm, profissional_filter.nome)
+            """Nome Profissional"""
+            pdf.drawString(0.88*cm, 26.5*cm, profissional_filter.nome)
+            """Nome CBO"""
+            pdf.drawString(6.99*cm, 26.5*cm, profissional_filter.cbo.nome)
+            """Nome CNES"""
+            pdf.drawString(10.1*cm, 26.5*cm,
+                           profissional_filter.equipe.unidade.nome)
+            """Nome INE"""
+            pdf.drawString(13.2*cm, 26.5*cm, 'EQUIPE %s' % profissional_filter.equipe.area)
             pdf.setFontSize(0.5*cm)
-            pdf.drawString(0.8*cm, 25.8*cm, profissional_filter.cns)
-            pdf.drawString(7.25*cm, 25.8*cm, profissional_filter.cbo.cbo)
-            pdf.drawString(10.3*cm, 25.8*cm,
+            """CNS"""
+            pdf.drawString(0.88*cm, 25.8*cm, profissional_filter.cns)
+            """CBO"""
+            pdf.drawString(6.99*cm, 25.8*cm, profissional_filter.cbo.cbo)
+            """CNES"""
+            pdf.drawString(10.1*cm, 25.8*cm,
                            profissional_filter.equipe.unidade.cnes)
-            pdf.drawString(13.55*cm, 25.8*cm, profissional_filter.equipe.ine)
+            """INE"""
+            pdf.drawString(13.2*cm, 25.8*cm, profissional_filter.equipe.ine)
             pdf.showPage()
             pdf.drawImage(
-                          find('core/img/ficha_de_procedimentos-1.png'),
+                          find('core/img/Ficha_de_Procedimentos-1.png'),
                           0, 0, 21*cm, 29.7*cm)
             pdf.showPage()
             pdf.save()
@@ -311,27 +349,44 @@ def ficha_esus(request, v1, v2, v3, v4):
                 % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=landscape(A4))
             pdf.drawImage(
-                          find('core/img/ficha_de_visitas_domiciliar-0.png'),
+                          find('core/img/Ficha_de_Visita_Domiciliar_e_Territorial-0.png'),
                           0, 0, 29.7*cm, 21*cm)
+            """Retangulo"""
             pdf.setFillColor(white)
-            pdf.rect(0.85*cm, 17.05*cm, 6.2*cm, 0.85*cm, stroke=False,
+            """CNS"""
+            pdf.rect(1.1*cm, 17.05*cm, 8*cm, 0.9*cm, stroke=False, fill=True)
+            """CBO"""
+            pdf.rect(9.5*cm, 17.05*cm, 4.4*cm, 0.9*cm, stroke=False,
                      fill=True)
-            pdf.rect(7.3*cm, 17.05*cm, 5.2*cm, 0.4*cm, stroke=False, fill=True)
-            pdf.rect(13*cm, 17.05*cm, 4.2*cm, 0.4*cm, stroke=False, fill=True)
-            pdf.rect(18.8*cm, 17.05*cm, 4.2*cm, 0.4*cm, stroke=False,
+            """CNES"""
+            pdf.rect(14.3*cm, 17.05*cm, 4.5*cm, 0.9*cm, stroke=False,
                      fill=True)
+            """INE"""
+            pdf.rect(19.2*cm, 17.05*cm, 5*cm, 0.9*cm, stroke=False, fill=True)
             pdf.setFillColor(black)
             pdf.setFontSize(0.2*cm)
-            pdf.drawString(0.85*cm, 17.7*cm, profissional_filter.nome)
+            """Nome Profissional"""
+            pdf.drawString(1.1*cm, 17.7*cm, profissional_filter.nome)
+            """Nome CBO"""
+            pdf.drawString(9.5*cm, 17.7*cm, profissional_filter.cbo.nome)
+            """Nome CNES"""
+            pdf.drawString(14.3*cm, 17.7*cm,
+                           profissional_filter.equipe.unidade.nome)
+            """Nome INE"""
+            pdf.drawString(19.2*cm, 17.7*cm, 'EQUIPE %s' % profissional_filter.equipe.area)
             pdf.setFontSize(0.5*cm)
-            pdf.drawString(0.85*cm, 17.05*cm, profissional_filter.cns)
-            pdf.drawString(7.3*cm, 17.05*cm, profissional_filter.cbo.cbo)
-            pdf.drawString(13*cm, 17.05*cm,
+            """CNS"""
+            pdf.drawString(1.1*cm, 17.05*cm, profissional_filter.cns)
+            """CBO"""
+            pdf.drawString(9.5*cm, 17.05*cm, profissional_filter.cbo.cbo)
+            """CNES"""
+            pdf.drawString(14.3*cm, 17.05*cm,
                            profissional_filter.equipe.unidade.cnes)
-            pdf.drawString(18.8*cm, 17.05*cm, profissional_filter.equipe.ine)
+            """INE"""
+            pdf.drawString(19.2*cm, 17.05*cm, profissional_filter.equipe.ine)
             pdf.showPage()
             pdf.drawImage(
-                          find('core/img/ficha_de_visitas_domiciliar-1.png'),
+                          find('core/img/Ficha_de_Visita_Domiciliar_e_Territorial-1.png'),
                           0, 0, 29.7*cm, 21*cm)
             pdf.showPage()
             pdf.save()
@@ -349,8 +404,9 @@ def ficha_esus(request, v1, v2, v3, v4):
                 % profissional_filter.nome
             pdf = canvas.Canvas(response, pagesize=A4)
             pdf.drawImage(
-                          find('core/img/ficha_individual_odontologico-0.png'),
+                          find('core/img/Ficha_de_Atendimento_Odontologico_Individual-0.png'),
                           0, 0, 21*cm, 29.7*cm)
+            """
             pdf.setFillColor(white)
             pdf.rect(0.8*cm, 25.71*cm, 6*cm, 0.9*cm, stroke=False, fill=True)
             pdf.rect(6.95*cm, 25.71*cm, 2.75*cm, 0.4*cm, stroke=False,
@@ -377,9 +433,86 @@ def ficha_esus(request, v1, v2, v3, v4):
                     pdf.setFontSize(0.5*cm)
                     pdf.drawString(0.8*cm, 24.71*cm, value.cns)
                     pdf.drawString(6.95*cm, 24.71*cm, value.cbo.cbo)
+            """
+            """Retangulo"""
+            pdf.setFillColor(white)
+            """CNS"""
+            pdf.rect(0.8*cm, 25.71*cm, 6*cm, 0.85*cm, stroke=False, fill=True)
+            """CBO"""
+            pdf.rect(6.99*cm, 25.71*cm, 2.9*cm, 0.85*cm, stroke=False,
+                     fill=True)
+            """CNES"""
+            pdf.rect(10.1*cm, 25.71*cm, 2.9*cm, 0.85*cm, stroke=False,
+                     fill=True)
+            """INE"""
+            pdf.rect(13.15*cm, 25.71*cm, 4.1*cm, 0.85*cm, stroke=False, fill=True)
+            """Dados"""
+            pdf.setFillColor(black)
+            pdf.setFontSize(0.2*cm)
+            """Nome Profissional"""
+            pdf.drawString(0.8*cm, 26.4*cm, profissional_filter.nome)
+            """Nome CBO"""
+            pdf.drawString(6.95*cm, 26.4*cm, profissional_filter.cbo.nome)
+            """Nome CNES"""
+            pdf.drawString(10.1*cm, 26.4*cm,
+                           profissional_filter.equipe.unidade.nome)
+            """Número equipe"""
+            if profissional_filter.equipe.area:
+                pdf.drawString(13.15*cm, 26.4*cm, 'EQUIPE %s' % (profissional_filter.equipe.area))
+            else:
+                pdf.drawString(13.15*cm, 26.4*cm, 'NASF')
+            pdf.setFontSize(0.5*cm)
+            """CNES"""
+            pdf.drawString(0.8*cm, 25.71*cm, profissional_filter.cns)
+            """CBO"""
+            pdf.drawString(6.95*cm, 25.71*cm, profissional_filter.cbo.cbo)
+            """CNES"""
+            pdf.drawString(10.1*cm, 25.71*cm,
+                           profissional_filter.equipe.unidade.cnes)
+            """INE"""
+            pdf.drawString(13.15*cm, 25.71*cm, profissional_filter.equipe.ine)
+            for value in profissional_list:
+                if value.cbo.cbo == '322430':
+                    """Retangulo"""
+                    pdf.setFillColor(white)
+                    """CNS"""
+                    pdf.rect(0.8*cm, 24.71*cm, 6*cm, 0.85*cm, stroke=False, fill=True)
+                    """CBO"""
+                    pdf.rect(6.99*cm, 24.71*cm, 2.9*cm, 0.85*cm, stroke=False,
+                             fill=True)
+                    """CNES"""
+                    pdf.rect(10.1*cm, 24.71*cm, 2.9*cm, 0.85*cm, stroke=False,
+                             fill=True)
+                    """INE"""
+                    pdf.rect(13.15*cm, 24.71*cm, 4.1*cm, 0.85*cm, stroke=False, fill=True)
+                    """Dados"""
+                    pdf.setFillColor(black)
+                    pdf.setFontSize(0.2*cm)
+                    """Nome Profissional"""
+                    pdf.drawString(0.8*cm, 25.4*cm, value.nome)
+                    """Nome CBO"""
+                    pdf.drawString(6.95*cm, 25.4*cm, value.cbo.nome)
+                    """Nome CNES"""
+                    pdf.drawString(10.1*cm, 25.4*cm,
+                                   value.equipe.unidade.nome)
+                    """Número equipe"""
+                    if profissional_filter.equipe.area:
+                        pdf.drawString(13.15*cm, 25.4*cm, 'EQUIPE %s' % (value.equipe.area))
+                    else:
+                        pdf.drawString(13.15*cm, 25.4*cm, 'NASF')
+                    pdf.setFontSize(0.5*cm)
+                    """CNES"""
+                    pdf.drawString(0.8*cm, 24.71*cm, value.cns)
+                    """CBO"""
+                    pdf.drawString(6.95*cm, 24.71*cm, value.cbo.cbo)
+                    """CNES"""
+                    pdf.drawString(10.1*cm, 24.71*cm,
+                                   value.equipe.unidade.cnes)
+                    """INE"""
+                    pdf.drawString(13.15*cm, 24.71*cm, value.equipe.ine)
             pdf.showPage()
             pdf.drawImage(
-                          find('core/img/ficha_individual_odontologico-1.png'),
+                          find('core/img/Ficha_de_Atendimento_Odontologico_Individual-1.png'),
                           0, 0, 21*cm, 29.7*cm)
             pdf.showPage()
             pdf.save()

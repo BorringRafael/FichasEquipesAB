@@ -95,3 +95,6 @@ ENV/
 # Database
 db.sqlite3
 core/migrations
+
+# Atom editor
+Atom.desktop
