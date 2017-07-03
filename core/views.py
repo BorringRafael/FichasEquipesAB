@@ -232,20 +232,15 @@ def ficha_esus(request, v1, v2, v3, v4):
             pdf.rect(10.45*cm, 21.4*cm, 9.83*cm, 3.5*cm, stroke=False,
                      fill=True)
             alt = 24.7*cm
-            if profissional_filter.cbo.cbo == '223293':
-                cns_list = [profissional_filter.cbo.cbo, '322430']
-            else:
-                cns_list = [profissional_filter.cbo.cbo]
             for value in Profissional.objects.filter(equipe__ine=v2).order_by('nome'):
-                if value.cbo.cbo in cns_list:
-                    pdf.setFillColor(black)
-                    pdf.setFontSize(0.2*cm)
-                    pdf.drawString(12.4*cm, alt, value.nome)
-                    pdf.drawString(10.6*cm, alt, value.cns)
-                    pdf.drawString(17*cm, alt, value.cbo.cbo)
-                    pdf.setFontSize(0.15*cm)
-                    pdf.drawString(17.7*cm, alt, value.cbo.nome)
-                    alt -= 6.0
+                pdf.setFillColor(black)
+                pdf.setFontSize(0.2*cm)
+                pdf.drawString(12.4*cm, alt, value.nome)
+                pdf.drawString(10.6*cm, alt, value.cns)
+                pdf.drawString(17*cm, alt, value.cbo.cbo)
+                pdf.setFontSize(0.15*cm)
+                pdf.drawString(17.7*cm, alt, value.cbo.nome)
+                alt -= 6.0
             pdf.showPage()
             pdf.drawImage(find('core/img/Ficha_de_Atividade_Coletiva-1.png'),
                           0, 0, 21*cm, 29.7*cm)
