@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block style %}
+{{ block.super }}
+  <script src="{% static 'core/js/unidades.js' %}"></script>
+{% endblock style %}
+
+{% block body %}
+
+<select id="estados">
+  <option value=""></option>
+{% for key, value in estados %}
+  <option value="{{key}}">{{value}}</option>
+{% endfor %}
+</select><br>
+
+<select id="municipios"></select><br>
+
+<select id="estabelecimentos"></select><br>
+
+<select id="equipes"></select><br>
+
+<select id="profissionais"></select><br>
+
+{% endblock %}

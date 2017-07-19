@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.staticfiles.finders import find
+from django.views.generic import View
 
 from .models import Equipe, Profissional, Auth_CBO
 
@@ -8,6 +9,57 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
 from reportlab.lib.colors import white, black, red
+
+
+class Unidades(View):
+    """Lista as unidades."""
+
+    def __init__(self):
+        """Inicia as variáveis."""
+        from requests import get
+        from operator import itemgetter
+
+        getestados = get(
+            url='http://cnes.datasus.gov.br/services/estados').json()
+        self.estados = sorted(
+            getestados.items(), key=itemgetter(1))
+
+    def get(self, request):
+        """Faz o get."""
+        return render(request, 'core/unidades.html',
+            {'estados': self.estados}
+        )
+
+class Busca(View):
+    """Busca municípios"""
+
+    def get(self, request):
+        """Faz o get"""
+
+        from django.http import HttpResponse
+        from django.core.serializers import serialize
+        from requests import get
+
+        municipios = request.GET.get('municipios')
+        estabelecimentos = request.GET.get('estabelecimentos')
+        equipes = request.GET.get('equipes')
+        profissionais = request.GET.get('profissionais')
+        area = request.GET.get('area')
+        tipo = request.GET.get('tipo')
+        municipioss = request.GET.get('municipioss')
+
+        if municipios:
+            data = get(url='http://cnes.datasus.gov.br/services/municipios?estado=%s' % municipios)
+        elif estabelecimentos:
+            data = get(url='http://cnes.datasus.gov.br/services/estabelecimentos?municipio=%s' % estabelecimentos)
+        elif equipes:
+            data = get(url='http://cnes.datasus.gov.br/services/estabelecimentos-equipes/%s' % equipes)
+        elif profissionais and municipioss and area and tipo:
+            data = get(url='http://cnes.datasus.gov.br/services/estabelecimentos-equipes/profissionais/%s/?coMun=%s&coArea=%s&coEquipe=%s' % (profissionais, municipioss, area, tipo))
+        else:
+            data = {"":""}
+
+        return HttpResponse(data, content_type='application/json')
 
 
 def equipe(request, v1):
@@ -233,14 +285,15 @@ def ficha_esus(request, v1, v2, v3, v4):
                      fill=True)
             alt = 24.7*cm
             for value in Profissional.objects.filter(equipe__ine=v2).order_by('nome'):
-                pdf.setFillColor(black)
-                pdf.setFontSize(0.2*cm)
-                pdf.drawString(12.4*cm, alt, value.nome)
-                pdf.drawString(10.6*cm, alt, value.cns)
-                pdf.drawString(17*cm, alt, value.cbo.cbo)
-                pdf.setFontSize(0.15*cm)
-                pdf.drawString(17.7*cm, alt, value.cbo.nome)
-                alt -= 6.0
+                if value.cns != profissional_filter.cns:
+                    pdf.setFillColor(black)
+                    pdf.setFontSize(0.2*cm)
+                    pdf.drawString(12.4*cm, alt, value.nome)
+                    pdf.drawString(10.6*cm, alt, value.cns)
+                    pdf.drawString(17*cm, alt, value.cbo.cbo)
+                    pdf.setFontSize(0.15*cm)
+                    pdf.drawString(17.7*cm, alt, value.cbo.nome)
+                    alt -= 6.0
             pdf.showPage()
             pdf.drawImage(find('core/img/Ficha_de_Atividade_Coletiva-1.png'),
                           0, 0, 21*cm, 29.7*cm)

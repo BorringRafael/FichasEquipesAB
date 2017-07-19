@@ -64,4 +64,10 @@ urlpatterns = [
         {"v1": "esus"},
         name='core.ficha_esus',
         ),
+    url(
+        r'^esus/unidades/$', Unidades.as_view(), name='core.Unidades'
+    ),
+    url(
+        r'^esus/busca/$', Busca.as_view(), name='core.Busca'
+    )
 ]
