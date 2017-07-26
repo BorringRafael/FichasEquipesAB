@@ -3,6 +3,7 @@
 
 {% block style %}
 {{ block.super }}
+  <link href="/static/core/css/unidades.css" rel="stylesheet">
   <script src="{% static 'core/js/unidades.js' %}"></script>
 {% endblock style %}
 
@@ -21,6 +22,6 @@
 
 <select id="equipes"></select><br>
 
-<select id="profissionais"></select><br>
+<div><ul id="profissionais"></ul></div>
 
 {% endblock %}

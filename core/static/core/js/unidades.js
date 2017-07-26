@@ -47,10 +47,23 @@ $(document).ready(function() {
       var code = $( this ).val().split("|");
       $.getJSON("/esus/busca", {profissionais: code[0], municipioss: code[1], area: code[2], tipo: code[3]}, function(data) {
         $('#profissionais').empty();
-        $('#profissionais').append(new Option("", ""));
         $.each(data, function(k, v) {
-          $('#profissionais').append(new Option(v.noProfissional + " - " + v.dsCbo, v.cns));
+          $('#profissionais').append(
+            "<li>" + v.noProfissional + " - " + v.dsCbo + " - " + v.cns + "<ul><li><a href=>1</a></li></ul></li>"
+          );
         });
+
+      $("#profissionais li").mouseover(function(){
+      var index = $("#profissionais li").index(this);
+      $("#profissionais li").eq(index).children("ul").slideDown("fast");
+      });
+
+      $("#profissionais li").mouseleave(function(){
+      var index = $("#profissionais li").index(this);
+      $("#profissionais li").eq(index).children("ul").slideUp("fast");
+      });
+
       });
     });
+
 });
